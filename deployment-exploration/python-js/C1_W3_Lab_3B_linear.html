@@ -1,0 +1,32 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"> </script>   
+<script>
+    function predict() {
+        var number = document.getElementById("input").value;
+        async function run(){
+            const MODEL_URL = './saved_model/model.json';
+            const model = await tf.loadLayersModel(MODEL_URL);
+            console.log(model.summary());
+            const input = tf.tensor2d([+number], [1,1]);
+            const result = model.predict(input);
+            alert(result)
+        }
+        run();
+    }
+</script>
+</head> 
+<body>
+    <h1 class="center"> Input your number here: </h1>
+    <div class="center">
+        <input type="number" id="input" name="input">
+    </div>
+    <div class="center">
+        <button type="button" onclick="predict()"> Predict </button>
+    </div>
+    <div class="center">
+        <p id="result"> result </p>
+    </div>
+</body>   
+</html>

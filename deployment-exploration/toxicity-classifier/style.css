@@ -1,0 +1,26 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button{
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+#answer{
+    text-align: center;
+    font-size: 1500%;
+    margin: 0px;
+    padding: 0px;
+}
+
+#input{
+    text-align: center;
+    font-size: 200%;
+    margin: 0px;
+    padding: 0px;
+}

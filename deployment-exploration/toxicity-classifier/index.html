@@ -1,0 +1,29 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/toxicity"></script>
+<script src="app.js"></script> 
+</head>
+<body>
+    <div class="container">
+        <h1>Toxicity Classifier</h1>
+    </div>
+    <div class="container">
+        <p><label for="input"> Write your text here, it will predict the toxicity of the text </label></p>
+    </div>
+    <div class="container">
+        <textarea id="input" name="input" rows="1" cols="25"></textarea>
+    </div>
+    <div class="button">
+        <button type="button" onclick="predict()"> Classify </button>
+    </div>
+    <div class="container">
+        <p id="label"></p>
+    </div>
+    <div class="container">
+        <p id="answer"></p>
+    </div>
+    
+</body>
+</html>    

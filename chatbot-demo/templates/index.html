@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>diskusai</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+  
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+    }
+  
+    .chat-container {
+      height: 300px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  
+    .message {
+      word-wrap: break-word;
+      padding: 5px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+  
+    .user-message {
+      text-align: right;
+      background-color: #e9ecef;
+      padding: 10px;
+    }
+  
+    .response-message {
+      text-align: left;
+      background-color: #d1ecf1;
+      padding: 10px;
+      white-space: pre-line;
+    }
+  
+    .response-message p {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">diskus<span style="color: blue;">AI</span></h1>
+    <div class="chat-container" id="chatContainer"></div>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" id="messageInput" placeholder="Type a message">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" id="sendButton">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Function to add a message to the chat container
+      function addMessage(message, isUser) {
+        var chatContainer = document.getElementById("chatContainer");
+        var messageClass = isUser ? "user-message" : "response-message";
+        var messageElement = document.createElement("div");
+        messageElement.className = "message " + messageClass;
+        messageElement.textContent = message;
+        chatContainer.appendChild(messageElement);
+
+        // Scroll to the bottom of the chat container
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+
+      // Function to simulate typing animation
+      function showTypingAnimation() {
+        var chatContainer = document.getElementById("chatContainer");
+        var typingElement = document.createElement("div");
+        typingElement.className = "message response-message";
+        typingElement.textContent = "Typing...";
+        chatContainer.appendChild(typingElement);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+
+      // Send button click event
+      $("#sendButton").click(function() {
+        var messageInput = $("#messageInput");
+        var message = messageInput.val().trim();
+        if (message !== "") {
+          addMessage(message, true);
+
+          // Show typing animation
+          showTypingAnimation();
+
+          // Simulate delay before displaying response
+          setTimeout(function() {
+            // Send the message as a POST request to '/api'
+            $.ajax({
+              url: "/api",
+              type: "POST",
+              data: JSON.stringify({ message: message }),
+              contentType: "application/json",
+              success: function(response) {
+                // Remove typing animation
+                $(".message.response-message:contains('Typing...')").remove();
+
+                if (response !== "Failed to generate a response.") {
+                  // Add the response message
+                  addMessage(response, false);
+                } else {
+                  // Display an error message
+                  addMessage("An error occurred.", false);
+                }
+              },
+              error: function() {
+                // Remove typing animation
+                $(".message.response-message:contains('Typing...')").remove();
+
+                // Display an error message
+                addMessage("An error occurred.", false);
+              }
+            });
+          }, 1500); // Adjust the delay time (in milliseconds) as needed
+
+          // Clear the message input
+          messageInput.val("");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
